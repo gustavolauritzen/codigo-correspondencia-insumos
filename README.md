@@ -1,8 +1,6 @@
 # codigo-correspondencia-insumos
 
-Código do TCC "Avaliação de Técnicas de Correspondência Textual para Automatização do Cruzamento entre Descrições de Insumos da Construção Civil" (UNIVALI, 2026). Compara BM25, Bi-Encoder, Cross-Encoder e abordagens híbridas (9 variantes) na correspondência entre descrições de insumos de empresas diferentes.
-
-O repositório traz o método, não os dados nem o gabarito. Com outro corpus e outro gabarito, os números serão outros.
+Esse repositório traz o método e o código do TCC "Avaliação de Técnicas de Correspondência Textual para Automatização do Cruzamento entre Descrições de Insumos da Construção Civil" (UNIVALI, 2026). Compara BM25, Bi-Encoder, Cross-Encoder e abordagens híbridas (9 variantes) na correspondência entre descrições de insumos de empresas diferentes.
 
 ## Estrutura
 
@@ -14,11 +12,11 @@ O repositório traz o método, não os dados nem o gabarito. Com outro corpus e 
 
 ## Como reproduzir
 
-Requisitos: Python 3.13, GPU (os tempos só valem em GPU) e `pip install -r requirements.txt`.
+Requisitos: Python 3.13, GPU e `pip install -r requirements.txt`.
 
 1. Coloque a coleta em `dados/bruto/` (formato em `dados/bruto/LEIA-ME.md`).
 2. `python executar.py preprocessar`
-3. **Monte o gabarito e os pares de treino.** Fica por sua conta: formato e regras em `dados/gabarito/LEIA-ME.md` e `dados/treino/LEIA-ME.md`.
+3. **Montagem do gabarito e dos pares de treino** (formato e regras em `dados/gabarito/LEIA-ME.md` e `dados/treino/LEIA-ME.md`).
 4. `python executar.py bm25`
 5. `python executar.py tokens`
 6. `python executar.py formato`

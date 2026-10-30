@@ -1,6 +1,6 @@
 # dados/gabarito/
 
-O gabarito não vem no repositório. Ele entra aqui, depois do pré-processamento (`dados/base.csv`) e antes de qualquer modelo. Como construí-lo fica por sua conta: o trabalho usou um anotador por regras, conferido manualmente em uma amostra, mas qualquer procedimento serve.
+O gabarito não vem no repositório. Ele entra aqui, depois do pré-processamento (`dados/base.csv`) e antes de qualquer modelo. Como construí-lo fica por sua conta: o trabalho o construiu por regras e o conferiu manualmente em uma amostra, mas qualquer procedimento serve.
 
 Regras que o código assume:
 
