@@ -1,0 +1,6 @@
+# Versões usadas nos resultados do trabalho (Python 3.13, GPU Tesla T4).
+torch==2.11.0
+sentence-transformers==5.7.0
+transformers==5.18.0
+rank-bm25==0.2.2
+numpy==2.1.3

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+saida/
+.venv/
+dados/*
+!dados/*/
+dados/*/*
+!dados/*/LEIA-ME.md
