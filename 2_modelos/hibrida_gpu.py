@@ -1,7 +1,7 @@
 """Híbridas: primeiro estágio -> Cross-Encoder dos K melhores. Roda em GPU.
 
 As quatro variantes: BM25 -> CE, Bi zero-shot -> CE, Bi Cosine -> CE, Bi MNR -> CE. Usam os melhores checkpoints
-escolhidos na VALIDAÇÃO (Bi Cosine e MNR, Cross-Encoder) e o BM25 com a escolha da validação. O K (20, 50, 100 ou 200) é
+escolhidos na VALIDAÇÃO (Bi Cosine e MNR, Cross-Encoder) e o BM25 com a escolha da validação. O K (5, 10, 20, 50, 100 ou 200) é
 escolhido na validação por MAP; no teste o K já vem fixado. Salvar progresso e retomar como no resto (retomada.py): os
 scores da validação são gravados consulta a consulta e o teste usa o protocolo único de execucao_teste.py (Setup = carregar
 os dois estágios e preparar o pool, média de 5 repetições; Consulta = primeiro estágio + Cross-Encoder).

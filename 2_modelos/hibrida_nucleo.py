@@ -9,7 +9,7 @@ import os
 import metricas as M
 import retomada as R
 
-K_GRADE = (20, 50, 100, 200)
+K_GRADE = (5, 10, 20, 50, 100, 200)
 TIPOS = ('bm25', 'bi_zero_shot', 'bi_cosine', 'bi_mnr')
 NOMES = {'bm25': 'Híbrida BM25 → CE', 'bi_zero_shot': 'Híbrida Bi zero-shot → CE',
          'bi_cosine': 'Híbrida Bi Cosine → CE', 'bi_mnr': 'Híbrida Bi MNR → CE'}

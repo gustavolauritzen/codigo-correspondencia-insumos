@@ -1,7 +1,8 @@
 """Bi-Encoder, parte com modelo. Roda em GPU.
 
 Modelo: BERTimbau Large com pooling por média (config.MODELO_BI_ENCODER). Variantes: zero-shot, Cosine (regressão do
-cosseno contra o rótulo 1/0, Reimers e Gurevych 2019) e MNR (negativos do lote, Henderson et al. §4.4).
+cosseno contra o rótulo 1/0, Reimers e Gurevych 2019, com os negativos do mesmo tipo e de outro tipo) e MNR
+(negativos do lote, Henderson et al. §4.4).
 Treino em laço próprio (sem `fit` do sentence-transformers, cuja API muda entre versões): AdamW, aquecimento
 linear de 10%, fp16, avaliação na VALIDAÇÃO a cada época (MAP, desempate MRR) e checkpoint só da melhor época.
 
@@ -164,7 +165,7 @@ def treinar(cfg, formato, local, persistente=None, max_seq=N.MAX_SEQ_PROVISORIO)
     meta = R.ler_json(os.path.join(pl, 'estado', 'meta.json'))
     fonte = os.path.join(pl, 'estado', 'modelo') if meta else C.MODELO_BI_ENCODER
     st = carregar_st(fonte, max_seq).to(dispositivo)
-    pos, neg = N.ler_pares_treino(formato)
+    pos, neg = N.ler_pares_treino(formato, outro_tipo=cfg['perda'] == 'cosine')
     otim = torch.optim.AdamW(st.parameters(), lr=cfg['lr'])
     passos = (len(N.lotes_sem_repeticao(pos, cfg['batch'], cfg['semente'] + 1)) if cfg['perda'] == 'mnr'
               else -(-(len(pos) + len(neg)) // cfg['batch']))

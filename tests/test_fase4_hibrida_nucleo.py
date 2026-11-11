@@ -31,7 +31,7 @@ class TestEscolhaK(unittest.TestCase):
         self.assertEqual(H.escolher_k(por_k), 50)
 
     def test_grade_e_tipos(self):
-        self.assertEqual(H.K_GRADE, (20, 50, 100, 200))
+        self.assertEqual(H.K_GRADE, (5, 10, 20, 50, 100, 200))
         self.assertEqual(len(H.TIPOS), 4)
         self.assertEqual(set(H.NOMES), set(H.TIPOS))
 

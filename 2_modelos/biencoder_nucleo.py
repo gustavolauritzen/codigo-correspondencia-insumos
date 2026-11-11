@@ -34,8 +34,9 @@ def textos_por_id(formato):
     return mapa
 
 
-def ler_pares_treino(formato):
-    """(positivos, negativos): listas de (texto_a, texto_b) lidas de dados/treino/."""
+def ler_pares_treino(formato, outro_tipo=False):
+    """(positivos, negativos): listas de (texto_a, texto_b) lidas de dados/treino/. Com `outro_tipo=True` (variante
+    Cosine), os negativos são os mesmos do Cross-Encoder: os do mesmo tipo seguidos dos de outro tipo."""
     textos = textos_por_id(formato)
     pasta = os.path.join(C.DB, 'treino')
 
@@ -43,7 +44,8 @@ def ler_pares_treino(formato):
         with open(os.path.join(pasta, nome), encoding='utf-8', newline='') as f:
             return [(textos[r['id_a']], textos[r['id_b']]) for r in csv.DictReader(f)]
 
-    return ler('pares_positivos.csv'), ler('pares_negativos.csv')
+    negativos = ler('pares_negativos.csv') + (ler('pares_negativos_outro_tipo.csv') if outro_tipo else [])
+    return ler('pares_positivos.csv'), negativos
 
 
 def lotes_sem_repeticao(pares, tamanho, semente):
