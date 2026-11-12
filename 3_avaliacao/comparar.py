@@ -12,6 +12,8 @@ import csv
 import os
 import sys
 
+import analise_teste as A
+import f1_por_consulta as F1
 import relatorio as RL
 import retomada as R
 
@@ -36,6 +38,8 @@ def coletar(pasta, exigir_todas=True):
             ausentes.append(nome)
             continue
         m = R.ler_json(arq)['metricas']
+        d = A.ler_variante(pasta, subpasta)
+        m.update(F1.calcular(d, sorted(d)))     # F1-Score@k: média das F1 de cada consulta
         brutas[nome] = m
         linhas[nome] = RL.linha(m)
     if exigir_todas and ausentes:

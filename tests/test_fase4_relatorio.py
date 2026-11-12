@@ -43,6 +43,8 @@ class TestComparativo(unittest.TestCase):
             p = os.path.join(d, sub)
             R.gravar_json(os.path.join(p, 'teste.json'), {'meta': {}, 'metricas': metricas()})
             R.gravar_json(os.path.join(p, 'concluido.json'), {})
+            with open(os.path.join(p, 'consultas.csv'), 'w', encoding='utf-8') as f:   # base da F1 por consulta
+                f.write('query_id,n_rel,h1,h5,h10\nq1,2,1,2,2\nq2,1,0,1,1\n')
 
     def test_nove_variantes(self):
         self.assertEqual(len(CP.VARIANTES), 9)

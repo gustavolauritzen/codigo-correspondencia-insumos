@@ -35,21 +35,19 @@ class TestMetricas(unittest.TestCase):
         self.assertAlmostEqual(M.ap(['a'], {'a', 'z'}), 0.5)
         self.assertEqual(M.rr(['a', 'b'], {'z'}), 0.0)
 
-    def test_f1_das_medias(self):
-        rks = {'q1': ['a', 'x'], 'q2': ['y', 'z']}
-        rel = {'q1': {'a'}, 'q2': {'z'}}
-        out = M.avaliar(rks, rel, ks=(1,))
-        # P@1: q1=1, q2=0 -> 0,5; R@1: q1=1, q2=0 -> 0,5; F1 das médias = 0,5 (e não a média dos F1)
-        self.assertEqual(out['P@1'], 0.5)
-        self.assertEqual(out['R@1'], 0.5)
-        self.assertEqual(out['F1@1'], 0.5)
+    def test_f1_media_das_f1_por_consulta(self):
+        import numpy as np
+        import f1_por_consulta as F1
         rks2 = {'q1': ['a', 'b', 'c'], 'q2': ['a', 'b', 'c']}
         rel2 = {'q1': {'a'}, 'q2': {'a', 'b', 'c', 'd'}}
-        o2 = M.avaliar(rks2, rel2, ks=(3,))
-        p, r = (1 / 3 + 1) / 2, (1 + 3 / 4) / 2                      # P e R médias: 2/3 e 0,875
-        self.assertAlmostEqual(o2['F1@3'], 2 * p * r / (p + r))
-        media_f1 = (2 * (1 / 3) * 1 / (1 / 3 + 1) + 2 * 1 * 0.75 / 1.75) / 2   # 0,6786: seria a média dos F1
-        self.assertNotAlmostEqual(o2['F1@3'], media_f1, places=3)
+        out = M.avaliar(rks2, rel2, ks=(3,))
+        self.assertNotIn('F1@3', out)                                  # a F1 sai de f1_por_consulta
+        linhas = {q: M.por_consulta(rks2[q], rel2[q], ks=(3,)) for q in rks2}
+        d = {q: {k: float(v) for k, v in l.items()} for q, l in linhas.items()}
+        media_f1 = (2 * (1 / 3) * 1 / (1 / 3 + 1) + 2 * 1 * 0.75 / 1.75) / 2   # 0,6786
+        self.assertAlmostEqual(F1.calcular(d, sorted(d), ks=(3,))['F1@3'], media_f1)
+        d0 = {'q1': {'h1': 0.0, 'n_rel': 2.0}}                          # nenhum relevante no corte: F1 = 0
+        self.assertEqual(F1.calcular(d0, ['q1'], ks=(1,))['F1@1'], 0.0)
 
     def test_consulta_sem_relevante_nao_entra(self):
         out = M.avaliar({'q1': ['a'], 'q2': ['b']}, {'q1': {'a'}, 'q2': set()}, ks=(1,))

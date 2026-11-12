@@ -2,8 +2,8 @@
 
 Um ranking é a lista de ids de documentos em ordem decrescente de score; documentos fora da lista contam como
 não recuperados. `relevantes` mapeia consulta -> conjunto de ids relevantes (só consultas com ao menos um
-relevante são avaliadas). F1@k é o "F1 of averages" (Opitz e Burst): F1 calculado sobre a precisão média e a
-revocação média, não a média dos F1 por consulta.
+relevante são avaliadas). O F1-Score@k é a média das F1 de cada consulta (Opitz e Burst, 2019), calculada a partir
+dos acertos gravados por consulta em `f1_por_consulta.py`.
 """
 KS = (1, 5, 10)
 
@@ -53,7 +53,6 @@ def avaliar(rankings, relevantes, ks=KS):
         p = sum(precisao_em_k(rankings[q], relevantes[q], k) for q in consultas) / n
         r = sum(revocacao_em_k(rankings[q], relevantes[q], k) for q in consultas) / n
         out[f'P@{k}'], out[f'R@{k}'] = p, r
-        out[f'F1@{k}'] = 2 * p * r / (p + r) if p + r > 0 else 0.0
     out['MRR'] = sum(rr(rankings[q], relevantes[q]) for q in consultas) / n
     out['MAP'] = sum(ap(rankings[q], relevantes[q]) for q in consultas) / n
     out['MRP'] = sum(r_precisao(rankings[q], relevantes[q]) for q in consultas) / n
@@ -70,14 +69,13 @@ def por_consulta(ranking, rel, ks=KS):
 
 def agregar(linhas, ks=KS):
     """Mesmas métricas de `avaliar`, a partir das linhas de `por_consulta` (lidas do disco): P@k = média de h_k / k,
-    R@k = média de h_k / n_rel, F1@k das médias."""
+    R@k = média de h_k / n_rel."""
     n = len(linhas)
     out = {'n_consultas': n}
     for k in ks:
         p = sum(float(r[f'h{k}']) / k for r in linhas) / n
         r_ = sum(float(r[f'h{k}']) / float(r['n_rel']) for r in linhas) / n
         out[f'P@{k}'], out[f'R@{k}'] = p, r_
-        out[f'F1@{k}'] = 2 * p * r_ / (p + r_) if p + r_ > 0 else 0.0
     out['MRR'] = sum(float(r['rr']) for r in linhas) / n
     out['MAP'] = sum(float(r['ap']) for r in linhas) / n
     out['MRP'] = sum(float(r['rp']) for r in linhas) / n

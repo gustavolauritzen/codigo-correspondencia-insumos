@@ -3,10 +3,10 @@
   python dispersao.py <pasta com as pastas teste_*>
 
 Para cada uma das 9 variantes lê `teste_<variante>/consultas.csv` (uma linha por consulta, gravada pela avaliação do teste) e:
-  1. recalcula TODAS as métricas médias com `metricas.agregar` e confere contra o `teste.json` da variante
-     (P@k, R@k, F1@k, MRR, MAP e MRP), parando se alguma diferir mais que 1e-9;
+  1. recalcula as métricas médias com `metricas.agregar` e confere contra o `teste.json` da variante
+     (P@k, R@k, MRR, MAP e MRP), parando se alguma diferir mais que 1e-9;
   2. calcula, sobre a AP por consulta, a variância amostral s2 = soma((AP_i - MAP)^2) / (n - 1) e o desvio
-     padrão s = raiz(s2), com n = número de consultas (Bessel; Reichel, 2025; Wazlawick, 2009);
+     padrão s = raiz(s2), com n = número de consultas (Morettin e Bussab, 2010);
   3. confere s2 e s contra `statistics.variance` e `statistics.stdev` da biblioteca padrão;
   4. grava, na mesma pasta, `dispersao_map_teste.csv` e `dispersao_map_teste.md`.
 Não abre o teste nem altera nada já gravado além desses dois arquivos. Só usa a biblioteca padrão.

@@ -70,7 +70,7 @@ class TestConsultas(unittest.TestCase):
             self.assertEqual((rodou, ja), (3, 2))
             retomado = R.agregar_registro(reg, self.CONS, self.REL, setup_ms=10.0)
             direto = M.avaliar({q['id']: self.ranquear(q) for q in self.CONS}, self.REL)
-            for k in ('P@1', 'R@1', 'F1@1', 'P@5', 'MRR', 'MAP', 'MRP'):
+            for k in ('P@1', 'R@1', 'P@5', 'MRR', 'MAP', 'MRP'):
                 self.assertAlmostEqual(retomado[k], direto[k], msg=k)
             self.assertEqual(retomado['Setup_ms'], 10.0)
             self.assertAlmostEqual(retomado['Total_ms'], 10.0 + retomado['Consulta_ms'])
