@@ -10,6 +10,11 @@
   python executar.py teste --confirmo-teste   7. as 9 variantes no teste (uma vez) e o comparativo
   python executar.py comparar          reescreve o comparativo a partir do que já está em saida/
   python executar.py dispersao         desvio padrão e variância da AP por consulta (teste)
+  python executar.py rankings          rankings do teste (1º estágio, híbridas, Cross-Encoder na amostra e completo)
+  python executar.py setups            Preparação das 9 variantes numa mesma sessão
+  python executar.py analises          F1 por consulta, significância, grupos, gráfico e R@K do 1º estágio
+  python executar.py planilhas         planilhas cegas da avaliação humana do primeiro colocado
+  python executar.py concordancia      concordância dos anotadores e com o gabarito
 
 Tudo o que é gerado vai para `saida/` (ou `--saida`). Etapas concluídas não são refeitas; para continuar uma etapa
 interrompida, rode o mesmo comando de novo. O teste só abre com --confirmo-teste, depois da validação completa.
@@ -173,9 +178,50 @@ def dispersao(args):
     print(DP.gravar(args.saida, DP.calcular(args.saida)))
 
 
+def rankings(args):
+    import rankings_teste as RT
+    import retomada as R
+    _exigir_gpu(args)
+    p = _parametros(args.saida)
+    for tipo in RT.TIPOS_PRIMEIRO_ESTAGIO:
+        RT.primeiro_estagio_teste(tipo, args.saida, p['formato'], p['max_seq'])
+    for tipo in HIBRIDAS:
+        k = R.ler_json(os.path.join(args.saida, f'hibrida_{tipo}_validacao', 'escolha.json'))['K']
+        RT.hibrida_top_teste(tipo, k, args.saida, p['formato'], p['max_seq'], p['max_len'])
+    RT.ce_amostra_teste(args.saida, p['formato'], p['max_len'])
+    RT.ce_completo_teste(args.saida, p['formato'], p['max_len'])
+
+
+def setups(args):
+    import rankings_teste as RT
+    _exigir_gpu(args)
+    p = _parametros(args.saida)
+    print(RT.setups_mesma_sessao(args.saida, p['formato'], p['max_seq'], p['max_len']))
+
+
+def analises(args):
+    import f1_por_consulta, grafico_eficacia_custo, por_grupo, rk_teste, significancia
+    f1_por_consulta.main(args.saida)
+    significancia.main(args.saida)
+    por_grupo.main(args.saida)
+    grafico_eficacia_custo.main(args.saida)
+    rk_teste.main(args.saida)
+
+
+def planilhas(args):
+    import avaliacao_humana as AH
+    AH.planilhas(args.saida)
+
+
+def concordancia(args):
+    import avaliacao_humana as AH
+    AH.concordancia(args.saida)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('etapa', choices=['preprocessar', 'bm25', 'tokens', 'formato', 'treinar', 'hibridas', 'teste', 'comparar', 'dispersao'])
+    ap.add_argument('etapa', choices=['preprocessar', 'bm25', 'tokens', 'formato', 'treinar', 'hibridas', 'teste', 'comparar', 'dispersao',
+                                      'rankings', 'setups', 'analises', 'planilhas', 'concordancia'])
     ap.add_argument('--saida', default=os.path.join(RAIZ, 'saida'), help='pasta de saída (padrão: saida/)')
     ap.add_argument('--confirmo-teste', action='store_true', help='abre o conjunto de teste (etapa final)')
     ap.add_argument('--aceitar-cpu', action='store_true', help='permite rodar sem GPU (lento; tempos sem valor)')
@@ -183,7 +229,8 @@ def main():
     args.saida = os.path.abspath(args.saida)
     os.makedirs(args.saida, exist_ok=True)
     {'preprocessar': preprocessar, 'bm25': bm25, 'tokens': tokens, 'formato': formato, 'treinar': treinar,
-     'hibridas': hibridas, 'teste': teste, 'comparar': comparar_cmd, 'dispersao': dispersao}[args.etapa](args)
+     'hibridas': hibridas, 'teste': teste, 'comparar': comparar_cmd, 'dispersao': dispersao, 'rankings': rankings,
+     'setups': setups, 'analises': analises, 'planilhas': planilhas, 'concordancia': concordancia}[args.etapa](args)
 
 
 if __name__ == '__main__':

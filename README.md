@@ -6,7 +6,7 @@ Esse repositório traz o método e o código do TCC "Avaliação de Técnicas de
 
 - `1_preprocessamento/`: limpeza, texto e deduplicação da base.
 - `2_modelos/`: BM25, Bi-Encoder, Cross-Encoder e híbridas.
-- `3_avaliacao/`: métricas, protocolo de teste, comparativo.
+- `3_avaliacao/`: métricas, protocolo de teste, comparativo e análises do teste.
 - `dados/`: entradas (`bruto/`, `gabarito/`, `treino/`); cada pasta tem um `LEIA-ME.md` com o formato.
 - `executar.py`: roda cada etapa.
 
@@ -24,7 +24,11 @@ Requisitos: Python 3.13, GPU e `pip install -r requirements.txt`.
 8. `python executar.py hibridas`
 9. `python executar.py teste --confirmo-teste`
 
-O resultado (as 9 variantes) fica em `saida/comparativo_teste.md`. As etapas retomam de onde pararam e nunca refazem o que já concluiu.
+10. `python executar.py rankings` e `python executar.py setups`
+11. `python executar.py analises`
+12. `python executar.py planilhas` e, com as planilhas preenchidas, `python executar.py concordancia`
+
+O resultado (as 9 variantes) fica em `saida/comparativo_teste.md`, e as análises em `saida/analises/`. As etapas retomam de onde pararam e nunca refazem o que já concluiu.
 
 Os modelos são o BERTimbau Large (`rufimelo/bert-large-portuguese-cased-sts` e `neuralmind/bert-large-portuguese-cased`), em revisões fixadas no `config.py`. Semente 42.
 

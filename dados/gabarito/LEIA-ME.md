@@ -13,7 +13,7 @@ Dois conjuntos, `validacao/` e `teste/`, cada um com três arquivos CSV:
 
 | Arquivo | Colunas lidas |
 |---|---|
-| `consultas.csv` | `query_id`, `banco_origem`, `texto_a` (copie de `base.csv`) |
+| `consultas.csv` | `query_id`, `banco_origem`, `texto_a` (copie de `base.csv`) e, para as análises por tipo, `tipo` (tipo de insumo da consulta, o mesmo usado pelas regras do gabarito) |
 | `candidatos.csv` | `doc_id`, `banco_origem`, `texto_a`, `texto_b` (copie de `base.csv`) |
 | `gabarito.csv` | `query_id`, `doc_id`: um par por linha, só os relevantes |
 
